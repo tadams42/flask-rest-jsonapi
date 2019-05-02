@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import json
-from uuid import UUID
 from datetime import datetime
+from uuid import UUID
+
+from flask import json, current_app
 
 
 class JSONEncoder(json.JSONEncoder):
@@ -12,3 +13,13 @@ class JSONEncoder(json.JSONEncoder):
         elif isinstance(obj, UUID):
             return str(obj)
         return json.JSONEncoder.default(self, obj)
+
+
+def json_dumps(obj, cls=JSONEncoder):
+    try:
+        sort_keys = current_app.config.get('JSON_SORT_KEYS')
+
+    except Exception:
+        sort_keys = False
+
+    return json.dumps(obj, cls=cls, sort_keys=sort_keys)

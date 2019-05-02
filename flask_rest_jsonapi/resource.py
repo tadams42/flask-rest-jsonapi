@@ -20,7 +20,7 @@ from flask_rest_jsonapi.decorators import check_headers, check_method_requiremen
 from flask_rest_jsonapi.schema import compute_schema, get_relationships, get_model_field
 from flask_rest_jsonapi.data_layers.base import BaseDataLayer
 from flask_rest_jsonapi.data_layers.alchemy import SqlalchemyDataLayer
-from flask_rest_jsonapi.utils import JSONEncoder
+from flask_rest_jsonapi.utils import json_dumps
 
 
 class ResourceMeta(MethodViewType):
@@ -78,7 +78,7 @@ class Resource(MethodView):
         if not isinstance(response, tuple):
             if isinstance(response, dict):
                 response.update({'jsonapi': {'version': '1.0'}})
-            return make_response(json.dumps(response, cls=JSONEncoder), 200, headers)
+            return make_response(json_dumps(response), 200, headers)
 
         try:
             data, status_code, headers = response
@@ -101,7 +101,7 @@ class Resource(MethodView):
         elif isinstance(data, str):
             json_reponse = data
         else:
-            json_reponse = json.dumps(data, cls=JSONEncoder)
+            json_reponse = json_dumps(data)
 
         return make_response(json_reponse, status_code, headers)
 

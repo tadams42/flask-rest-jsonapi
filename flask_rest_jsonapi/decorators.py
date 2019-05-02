@@ -9,7 +9,7 @@ from flask import request, make_response, jsonify, current_app
 
 from flask_rest_jsonapi.errors import jsonapi_errors
 from flask_rest_jsonapi.exceptions import JsonApiException
-from flask_rest_jsonapi.utils import JSONEncoder
+from flask_rest_jsonapi.utils import json_dumps
 
 
 def check_headers(func):
@@ -24,10 +24,10 @@ def check_headers(func):
             if 'Content-Type' in request.headers and\
                     'application/vnd.api+json' in request.headers['Content-Type'] and\
                     request.headers['Content-Type'] != 'application/vnd.api+json':
-                error = json.dumps(jsonapi_errors([{'source': '',
+                error = json_dumps(jsonapi_errors([{'source': '',
                                                     'detail': "Content-Type header must be application/vnd.api+json",
                                                     'title': 'Invalid request header',
-                                                    'status': '415'}]), cls=JSONEncoder)
+                                                    'status': '415'}]))
                 return make_response(error, 415, {'Content-Type': 'application/vnd.api+json'})
         if 'Accept' in request.headers:
             flag = False
@@ -38,11 +38,11 @@ def check_headers(func):
                 if 'application/vnd.api+json' in accept and accept.strip() != 'application/vnd.api+json':
                     flag = True
             if flag is True:
-                error = json.dumps(jsonapi_errors([{'source': '',
+                error = json_dumps(jsonapi_errors([{'source': '',
                                                     'detail': ('Accept header must be application/vnd.api+json without'
                                                                'media type parameters'),
                                                     'title': 'Invalid request header',
-                                                    'status': '406'}]), cls=JSONEncoder)
+                                                    'status': '406'}]))
                 return make_response(error, 406, {'Content-Type': 'application/vnd.api+json'})
         return func(*args, **kwargs)
     return wrapper
