@@ -2,10 +2,9 @@
 
 """Decorators to check headers and method requirements for each Api calls"""
 
-import json
 from functools import wraps
 
-from flask import request, make_response, jsonify, current_app
+from flask import request, make_response, current_app
 
 from flask_rest_jsonapi.errors import jsonapi_errors
 from flask_rest_jsonapi.exceptions import JsonApiException
@@ -75,7 +74,7 @@ def jsonapi_exception_formatter(func):
         try:
             return func(*args, **kwargs)
         except JsonApiException as e:
-            return make_response(jsonify(jsonapi_errors([e.to_dict()])),
+            return make_response(json_dumps(jsonapi_errors([e.to_dict()])),
                                  e.status,
                                  headers)
         except Exception as e:

@@ -3,7 +3,6 @@
 """This module contains the logic of resource management"""
 
 import inspect
-import json
 from six import with_metaclass
 
 from werkzeug.wrappers import Response

@@ -2,7 +2,10 @@
 
 """Helper to deal with querystring parameters according to jsonapi specification"""
 
-import json
+try:
+    import rapidjson as json
+except ImportError:
+    import json
 
 from flask import current_app
 
